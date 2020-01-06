@@ -16,9 +16,9 @@
 
 #include "libu8/u8logging.h"
 
-#include "tidy/tidy.h"
-#include "tidy/tidybuffio.h"
-#include "tidy/tidyenum.h"
+#include "tidy5/tidy.h"
+#include "tidy5/tidybuffio.h"
+#include "tidy5/tidyenum.h"
 
 KNO_EXPORT int kno_init_tidy(void) KNO_LIBINIT_FN;
 u8_condition kno_TidyError=_("Tidy Error");
