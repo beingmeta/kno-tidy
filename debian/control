@@ -1,4 +1,4 @@
-Source: kno-sundown
+Source: kno-tidy
 Priority: optional
 Maintainer: Ken Haase <kh@beingmeta.com>
 Build-Depends: debhelper (>= 8.0.0), autotools-dev, debsigs, devscripts, libu8-dev, kno-dev
@@ -6,10 +6,10 @@ Standards-Version: 3.9.4
 Section: libs
 Homepage: http://www.beingmeta.com/
 
-Package: kno-sundown
+Package: kno-tidy
 Section: libdevel
 Architecture: any
 Depends: kno-core
-Conflicts: kno-sundown
-Description: Sundown module for KNO
+Conflicts: kno-tidy
+Description: Tidy module for KNO
 
