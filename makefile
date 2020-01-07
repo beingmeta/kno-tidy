@@ -151,6 +151,9 @@ debian.updated: debian.signed
 
 update-apt: debian.updated
 
+debinstall: debian.signed
+	${SUDO} dpkg -i ../kno-tidy*.deb
+
 debclean:
 	rm -f ../kno-tidy_* ../kno-tidy-* debian/changelog
 
