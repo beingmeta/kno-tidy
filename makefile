@@ -20,8 +20,8 @@ MOD_NAME	::= tidy
 MOD_RELEASE     ::= $(shell cat etc/release)
 MOD_VERSION	::= ${KNO_MAJOR}.${KNO_MINOR}.${MOD_RELEASE}
 
-GPGID           ::= FE1BC737F9F323D732AA26330620266BE5AFF294
-SUDO            ::= $(shell which sudo)
+GPGID = FE1BC737F9F323D732AA26330620266BE5AFF294
+SUDO  = $(shell which sudo)
 
 TIDY_OBJECTS=\
 	tidy5/access.o 	\
