@@ -130,18 +130,25 @@ fresh:
 	make clean
 	make default
 
-debian/changelog: ${MOD_NAME}.c makefile tidy5/*.c tidy5/*.h \
-		  debian/rules debian/control debian/changelog.base
+debian: tidy.c makefile \
+	dist/debian/rules dist/debian/control \
+	dist/debian/changelog.base
+	rm -rf debian
+	cp -r dist/debian debian
+	cat debian/changelog.base | etc/gitchangelog kno-tidy > debian/changelog
+
+debian/changelog: debian tidy.c makefile
 	cat debian/changelog.base | etc/gitchangelog kno-tidy > $@
 
-debian.built: tidy.c makefile tidy5/*.c tidy5/*.h \
-		debian/rules debian/control debian/changelog
+debian.built: tidy.c makefile debian debian/changelog
 	dpkg-buildpackage -sa -us -uc -b -rfakeroot && \
 	touch $@
 
 debian.signed: debian.built
 	debsign --re-sign -k${GPGID} ../kno-tidy_*.changes && \
 	touch $@
+
+dpkg dpkgs: debian.signed
 
 debinstall: debian.signed
 	sudo dpkg -i ../kno-tidy_${MOD_VERSION}*.deb
@@ -150,9 +157,6 @@ debian.updated: debian.signed
 	dupload -c ./debian/dupload.conf --nomail --to bionic ../kno-tidy_*.changes && touch $@
 
 update-apt: debian.updated
-
-debinstall: debian.signed
-	${SUDO} dpkg -i ../kno-tidy*.deb
 
 debclean:
 	rm -f ../kno-tidy_* ../kno-tidy-* debian/changelog
