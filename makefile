@@ -93,7 +93,7 @@ TIDY_H_FILES=\
 	tidy5/version.h 	\
 	tidy5/win32tc.h
 
-default: ${MOD_NAME}.${libsuffix}
+default build: ${MOD_NAME}.${libsuffix}
 
 tidy.so: tidy.c $(TIDY_OBJECTS)
 	@$(MKSO) $(CFLAGS) -o $@ tidy.c $(TIDY_OBJECTS)
@@ -109,7 +109,7 @@ tidy.dylib: tidy.c $(TIDY_OBJECTS)
 TAGS: tidy.c tidy5/*.c tidy5/*.h
 	etags -o TAGS tidy.c tidy5/*.c tidy5/*.h
 
-install:
+install: build
 	@${SUDO} ${SYSINSTALL} ${MOD_NAME}.${libsuffix} \
 			${CMODULES}/${MOD_NAME}.so.${MOD_VERSION}
 	@echo === Installed ${CMODULES}/${MOD_NAME}.so.${MOD_VERSION}
