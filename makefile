@@ -135,10 +135,12 @@ debian: tidy.c makefile \
 	dist/debian/changelog.base
 	rm -rf debian
 	cp -r dist/debian debian
-	cat debian/changelog.base | etc/gitchangelog kno-tidy > debian/changelog
 
 debian/changelog: debian tidy.c makefile
-	cat debian/changelog.base | etc/gitchangelog kno-tidy > $@
+	cat debian/changelog.base | etc/gitchangelog kno-tidy > $@.tmp
+	if diff debian/changelog debian/changelog.tmp 2>&1 > /dev/null; then \
+	  mv debian/changelog.tmp debian/changelog; \
+	else rm debian/changelog.tmp; fi
 
 debian.built: tidy.c makefile debian debian/changelog
 	dpkg-buildpackage -sa -us -uc -b -rfakeroot && \
