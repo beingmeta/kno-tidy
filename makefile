@@ -162,7 +162,7 @@ debinstall: dist/debian.signed
 
 update-apt: dist/debian.updated
 
-debclean:
+debclean: clean
 	rm -rf ../kno-tidy_* ../kno-tidy-* debian dist/debian.*
 
 debfresh:
