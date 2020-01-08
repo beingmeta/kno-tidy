@@ -138,31 +138,33 @@ debian: tidy.c makefile \
 
 debian/changelog: debian tidy.c makefile
 	cat debian/changelog.base | etc/gitchangelog kno-tidy > $@.tmp
-	if diff debian/changelog debian/changelog.tmp 2>&1 > /dev/null; then \
+	@if test ! -f debian/changelog; then \
+	  mv debian/changelog.tmp debian/changelog; \
+	 elif diff debian/changelog debian/changelog.tmp 2>&1 > /dev/null; then \
 	  mv debian/changelog.tmp debian/changelog; \
 	else rm debian/changelog.tmp; fi
 
-debian.built: tidy.c makefile debian debian/changelog
+dist/debian.built: tidy.c makefile debian debian/changelog
 	dpkg-buildpackage -sa -us -uc -b -rfakeroot && \
 	touch $@
 
-debian.signed: debian.built
+dist/debian.signed: dist/debian.built
 	debsign --re-sign -k${GPGID} ../kno-tidy_*.changes && \
 	touch $@
 
-dpkg dpkgs: debian.signed
-
-debinstall: debian.signed
-	sudo dpkg -i ../kno-tidy_${MOD_VERSION}*.deb
-
-debian.updated: debian.signed
+dist/debian.updated: dist/debian.signed
 	dupload -c ./debian/dupload.conf --nomail --to bionic ../kno-tidy_*.changes && touch $@
 
-update-apt: debian.updated
+deb debs dpkg dpkgs: dist/debian.signed
+
+debinstall: dist/debian.signed
+	sudo dpkg -i ../kno-tidy_${MOD_VERSION}*.deb
+
+update-apt: dist/debian.updated
 
 debclean:
 	rm -f ../kno-tidy_* ../kno-tidy-* debian/changelog
 
 debfresh:
 	make debclean
-	make debian.built
+	make dist/debian.built
