@@ -145,7 +145,7 @@ debian/changelog: debian tidy.c makefile
 	else rm debian/changelog.tmp; fi
 
 dist/debian.built: tidy.c makefile debian debian/changelog
-	dpkg-buildpackage -sa -us -uc -b -rfakeroot && \
+	dpkg-buildpackage -sa -us -uc -b && \
 	touch $@
 
 dist/debian.signed: dist/debian.built
@@ -163,7 +163,7 @@ debinstall: dist/debian.signed
 update-apt: dist/debian.updated
 
 debclean:
-	rm -rf ../kno-tidy_* ../kno-tidy-* debian
+	rm -rf ../kno-tidy_* ../kno-tidy-* debian dist/debian.*
 
 debfresh:
 	make debclean
