@@ -163,7 +163,7 @@ debinstall: dist/debian.signed
 update-apt: dist/debian.updated
 
 debclean:
-	rm -f ../kno-tidy_* ../kno-tidy-* debian/changelog
+	rm -rf ../kno-tidy_* ../kno-tidy-* debian
 
 debfresh:
 	make debclean
