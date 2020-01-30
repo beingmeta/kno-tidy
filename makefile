@@ -171,3 +171,21 @@ debclean: clean
 debfresh:
 	make debclean
 	make dist/debian.built
+
+# Alpine packaging
+
+staging/alpine/APKBUILD: dist/alpine/APKBUILD
+	if test ! -d staging; then mkdir staging; fi
+	if test ! -d staging/alpine; then mkdir staging/alpine; fi
+	cp dist/alpine/APKBUILD staging/alpine/APKBUILD
+
+staging/alpine.done: staging/alpine/APKBUILD
+	cd dist/alpine; \
+		abuild -P ${APKREPO} clean cleancache cleanpkg && \
+		abuild -P ${APKREPO} checksum && \
+		abuild -P ${APKREPO} && \
+		cd ../..; touch $@
+
+alpine: staging/alpine.done
+
+.PHONY: alpine
