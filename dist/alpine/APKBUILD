@@ -16,7 +16,6 @@ source="https://github.com/beingmeta/kno-sundown/archive/trunk.tar.gz"
 builddir="kno-sundown-trunk"
 
 build() {
-	git clone git@github.com:mongodb/mongo-c-driver.git
 	make -j
 }
 
@@ -28,4 +27,3 @@ package() {
 	cd src/${builddir}
 	make DESTDIR="$pkgdir" SUDO= install
 }
-sha512sums="f1f7df5f7ed098aa0624380ef5342c59130cd691e254647493ec5bd6ba4b7a1e0615c929f4c77c33cd25ce08d069a54e710fb28a204cf54c4f24b3a6b0eb0e35  trunk.tar.gz"
