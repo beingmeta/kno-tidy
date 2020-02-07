@@ -1,10 +1,12 @@
-KNOCONFIG       ::= knoconfig
+KNOCONFIG         = knoconfig
+KNOBUILD          = knobuild
+
 prefix		::= $(shell ${KNOCONFIG} prefix)
 libsuffix	::= $(shell ${KNOCONFIG} libsuffix)
 KNO_CFLAGS	::= -I. -fPIC $(shell ${KNOCONFIG} cflags)
 KNO_LDFLAGS	::= -fPIC $(shell ${KNOCONFIG} ldflags)
-CFLAGS		::= ${CFLAGS} ${KNO_CFLAGS}
-LDFLAGS		::= ${LDFLAGS} ${KNO_LDFLAGS}
+INIT_CFLAGS	::= ${CFLAGS}
+INIT_LDFLAGS	::= ${LDFLAGS}
 CMODULES	::= $(DESTDIR)$(shell ${KNOCONFIG} cmodules)
 LIBS		::= $(shell ${KNOCONFIG} libs)
 LIB		::= $(shell ${KNOCONFIG} lib)
@@ -14,18 +16,24 @@ KNO_MAJOR	::= $(shell ${KNOCONFIG} major)
 KNO_MINOR	::= $(shell ${KNOCONFIG} minor)
 PKG_RELEASE	::= $(cat ./etc/release)
 DPKG_NAME	::= $(shell ./etc/dpkgname)
-MKSO		::= $(CC) -shared $(LDFLAGS) $(LIBS)
-MSG		::= echo
-SYSINSTALL      ::= /usr/bin/install -c
-PKG_NAME	::= tidy
-PKG_RELEASE     ::= $(shell cat etc/release)
-PKG_VERSION	::= ${KNO_MAJOR}.${KNO_MINOR}.${PKG_RELEASE}
-APKREPO		::= $(shell ${KNOCONFIG} apkrepo)
-CODENAME	::= $(shell ${KNOCONFIG} codename)
-RELSTATUS	::= $(shell ${KNOCONFIG} status)
+SUDO            ::= $(shell which sudo)
 
-GPGID = FE1BC737F9F323D732AA26330620266BE5AFF294
-SUDO  = $(shell which sudo)
+CFLAGS		  = ${INIT_CFLAGS} ${KNO_CFLAGS}
+LDFLAGS		  = ${INIT_LDFLAGS} ${KNO_LDFLAGS}
+MKSO		  = $(CC) -shared $(LDFLAGS) $(LIBS)
+MSG		  = echo
+SYSINSTALL        = /usr/bin/install -c
+
+PKG_NAME	::= tidy
+GPGID             = FE1BC737F9F323D732AA26330620266BE5AFF294
+PKG_VERSION	  = ${KNO_MAJOR}.${KNO_MINOR}.${PKG_RELEASE}
+PKG_RELEASE     ::= $(shell cat etc/release)
+CODENAME	::= $(shell ${KNOCONFIG} codename)
+RELSTATUS	::= $(shell ${KNOBUILD} getbuildopt BUILDSTATUS stable)
+DEFAULT_ARCH    ::= $(shell /bin/arch)
+ARCH            ::= $(shell ${KNOBUILD} ARCH ${DEFAULT_ARCH})
+APKREPO         ::= $(shell ${KNOBUILD} getbuildopt APKREPO /srv/repo/kno/apk)
+APK_ARCH_DIR      = ${APKREPO}/staging/${ARCH}
 
 TIDY_OBJECTS=\
 	tidy5/access.o 	\
@@ -139,6 +147,11 @@ fresh:
 	make clean
 	make default
 
+gitup gitup-trunk:
+	git checkout trunk && git pull
+
+# Debian packaging
+
 debian: tidy.c makefile \
 	dist/debian/rules dist/debian/control \
 	dist/debian/changelog.base
@@ -181,9 +194,6 @@ debfresh:
 
 # Alpine packaging
 
-${APKREPO}/dist/x86_64:
-	@install -d $@
-
 staging/alpine:
 	@install -d $@
 
@@ -194,7 +204,8 @@ staging/alpine/kno-${PKG_NAME}.tar: staging/alpine
 	git archive --prefix=kno-${PKG_NAME}/ -o staging/alpine/kno-${PKG_NAME}.tar HEAD
 
 dist/alpine.done: staging/alpine/APKBUILD makefile \
-	staging/alpine/kno-${PKG_NAME}.tar ${APKREPO}/dist/x86_64
+	staging/alpine/kno-${PKG_NAME}.tar
+	if [ ! -d ${APK_ARCH_DIR} ]; then mkdir -p ${APK_ARCH_DIR}; fi;
 	cd staging/alpine; \
 		abuild -P ${APKREPO} clean cleancache cleanpkg && \
 		abuild checksum && \
