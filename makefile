@@ -188,7 +188,7 @@ dist/debian.updated: dist/debian.signed
 deb debs dpkg dpkgs: dist/debian.signed
 
 debinstall: dist/debian.signed
-	${SUDO} dpkg -i ../kno-tidy_${PKG_VERSION}*.deb
+	${SUDO} dpkg -i ../kno-tidy*.deb
 
 update-apt: dist/debian.updated
 
