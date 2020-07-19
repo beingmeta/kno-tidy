@@ -36,6 +36,7 @@ REL_PRIORITY	::= $(shell ${KNOBUILD} getbuildopt REL_PRIORITY medium)
 ARCH            ::= $(shell ${KNOBUILD} getbuildopt BUILD_ARCH || uname -m)
 APKREPO         ::= $(shell ${KNOBUILD} getbuildopt APKREPO /srv/repo/kno/apk)
 APK_ARCH_DIR      = ${APKREPO}/staging/${ARCH}
+ABUILD_FLAGS      =
 
 TIDY_OBJECTS=\
 	tidy5/access.o 	\
@@ -216,7 +217,7 @@ dist/alpine.done: staging/alpine/APKBUILD makefile \
 	cd staging/alpine; \
 		abuild -P ${APKREPO} clean cleancache cleanpkg && \
 		abuild checksum && \
-		abuild -P ${APKREPO} && \
+		abuild -P ${APKREPO} ${ABUILD_FLAGS} && \
 		touch ../../$@
 
 alpine: dist/alpine.done
