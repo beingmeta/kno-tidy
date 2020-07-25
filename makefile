@@ -114,7 +114,6 @@ default build: ${PKG_NAME}.${libsuffix}
 
 tidy.so: tidy.c $(TIDY_OBJECTS)
 	@$(MKSO) $(CFLAGS) -o $@ tidy.c $(TIDY_OBJECTS)
-	@if test ! -z "${COPY_CMODS}"; then cp $@ ${COPY_CMODS}; fi;
 	@$(MSG) MKSO  $@ $<
 	@ln -sf $(@F) $(@D)/$(@F).${KNO_MAJOR}
 tidy.dylib: tidy.c $(TIDY_OBJECTS)
@@ -122,7 +121,6 @@ tidy.dylib: tidy.c $(TIDY_OBJECTS)
 		`basename $(@F) .dylib`.${KNO_MAJOR}.dylib \
 		${CFLAGS} -o $@ $(DYLIB_FLAGS) \
 		tidy.c $(TIDY_OBJECTS)
-	@if test ! -z "${COPY_CMODS}"; then cp $@ ${COPY_CMODS}; fi;
 	@$(MSG) MACLIBTOOL  $@ $<
 
 TAGS: tidy.c tidy5/*.c tidy5/*.h
