@@ -210,9 +210,9 @@ dist/alpine.setup: staging/alpine/APKBUILD makefile ${STATICLIBS} \
 		abuild checksum ) && \
 	touch $@
 
-dist/alpine.build: dist/alpine.setup
+dist/alpine.done: dist/alpine.setup
 	cd staging/alpine; abuild -P ${APKREPO}
-dist/alpine.install: dist/alpine.setup
+dist/alpine.installed: dist/alpine.setup
 	cd staging/alpine; apk add --repository=${APKREPO}/staging kno-${PKG_NAME}
 
 
