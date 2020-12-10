@@ -171,18 +171,19 @@ dist/debian.built: tidy.c makefile debian debian/changelog
 	touch $@
 
 dist/debian.signed: dist/debian.built
-	debsign --re-sign -k${GPGID} ../kno-tidy_*.changes && \
-	touch $@
-
-dist/debian.updated: dist/debian.signed
-	dupload -c ./dist/dupload.conf --nomail --to bionic ../kno-tidy_*.changes && touch $@
+	@if test "${GPGID}" = "none" || test -z "${GPGID}"; then  	\
+	  echo "Skipping debian signing";				\
+	  touch $@;							\
+	else 								\
+	  echo debsign --re-sign -k${GPGID} ../kno-gidy_*.changes;	\
+	  debsign --re-sign -k${GPGID} ../kno-tidy_*.changes && 	\
+	  touch $@;							\
+	fi;
 
 deb debs dpkg dpkgs: dist/debian.signed
 
 debinstall: dist/debian.signed
 	${SUDO} dpkg -i ../kno-tidy*.deb
-
-update-apt: dist/debian.updated
 
 debclean: clean
 	rm -rf ../kno-tidy_* ../kno-tidy-* debian dist/debian.*
