@@ -113,6 +113,10 @@ TIDY_H_FILES=\
 	tidy5/version.h 	\
 	tidy5/win32tc.h
 
+%.o: %.c
+	@$(CC) $(CFLAGS) -D_FILEINFO="\"$(shell u8_fileinfo ./$< $(dirname $(pwd))/)\"" -o $@ -c $<
+	@$(MSG) CC $@ $<
+
 default build: ${PKG_NAME}.${libsuffix}
 
 tidy.so: tidy.c $(TIDY_OBJECTS)
