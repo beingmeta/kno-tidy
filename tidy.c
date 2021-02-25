@@ -1,6 +1,7 @@
 /* -*- Mode: C; Character-encoding: utf-8; -*- */
 
 /* Copyright (C) 2007-2016 beingmeta, inc.
+   Copyright (C) 2020-2021 beingmeta, LLC
    This file is part of beingmeta's Kno platform and is copyright
    and a valuable trade secret of beingmeta, inc.
 */
@@ -235,11 +236,11 @@ static lispval tidy_prim_helper(lispval string,lispval opts,lispval diag,
 
 
 DEFC_PRIM("tidy5",tidy_prim,
- KNO_MAX_ARGS(3)|KNO_MIN_ARGS(1),
- "Cleans up HTML text in its agument",
-	     {"string",kno_string_type,KNO_VOID},
-	     {"opts",kno_any_type,KNO_VOID},
-	     {"diag",kno_any_type,KNO_VOID})
+	  KNO_MAX_ARGS(3)|KNO_MIN_ARGS(1),
+	  "Cleans up HTML text in its agument",
+	  {"string",kno_string_type,KNO_VOID},
+	  {"opts",kno_any_type,KNO_VOID},
+	  {"diag",kno_any_type,KNO_VOID})
 static lispval tidy_prim(lispval string,lispval opts,lispval diag)
 {
   return tidy_prim_helper(string,opts,diag,1,-1);
@@ -247,11 +248,11 @@ static lispval tidy_prim(lispval string,lispval opts,lispval diag)
 
 
 DEFC_PRIM("tidy->indent",tidy_indent_prim,
- KNO_MAX_ARGS(3)|KNO_MIN_ARGS(1),
- "Cleans up HTML text, indenting the result",
-	     {"string",kno_string_type,KNO_VOID},
-	     {"opts",kno_any_type,KNO_VOID},
-	     {"diag",kno_any_type,KNO_VOID})
+	  KNO_MAX_ARGS(3)|KNO_MIN_ARGS(1),
+	  "Cleans up HTML text, indenting the result",
+	  {"string",kno_string_type,KNO_VOID},
+	  {"opts",kno_any_type,KNO_VOID},
+	  {"diag",kno_any_type,KNO_VOID})
 static lispval tidy_indent_prim(lispval string,lispval opts,lispval diag)
 {
   return tidy_prim_helper(string,opts,diag,0,-1);
@@ -259,11 +260,11 @@ static lispval tidy_indent_prim(lispval string,lispval opts,lispval diag)
 
 
 DEFC_PRIM("tidy->html",tidy_html_prim,
- KNO_MAX_ARGS(3)|KNO_MIN_ARGS(1),
- "Cleans up HTML text, generates HTML5 (not XHTML)",
-	     {"string",kno_string_type,KNO_VOID},
-	     {"opts",kno_any_type,KNO_VOID},
-	     {"diag",kno_any_type,KNO_VOID})
+	  KNO_MAX_ARGS(3)|KNO_MIN_ARGS(1),
+	  "Cleans up HTML text, generates HTML5 (not XHTML)",
+	  {"string",kno_string_type,KNO_VOID},
+	  {"opts",kno_any_type,KNO_VOID},
+	  {"diag",kno_any_type,KNO_VOID})
 static lispval tidy_html_prim(lispval string,lispval opts,lispval diag)
 {
   return tidy_prim_helper(string,opts,diag,1,0);
@@ -271,11 +272,11 @@ static lispval tidy_html_prim(lispval string,lispval opts,lispval diag)
 
 
 DEFC_PRIM("tidy->xhtml",tidy_xhtml_prim,
- KNO_MAX_ARGS(3)|KNO_MIN_ARGS(1),
- "Cleans up HTML text, generating XHTML",
-	     {"string",kno_string_type,KNO_VOID},
-	     {"opts",kno_any_type,KNO_VOID},
-	     {"diag",kno_any_type,KNO_VOID})
+	  KNO_MAX_ARGS(3)|KNO_MIN_ARGS(1),
+	  "Cleans up HTML text, generating XHTML",
+	  {"string",kno_string_type,KNO_VOID},
+	  {"opts",kno_any_type,KNO_VOID},
+	  {"diag",kno_any_type,KNO_VOID})
 static lispval tidy_xhtml_prim(lispval string,lispval opts,lispval diag)
 {
   return tidy_prim_helper(string,opts,diag,1,1);
